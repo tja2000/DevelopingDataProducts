@@ -6,18 +6,21 @@
 #
 
 library(shiny)
+mtcars2 <- mtcars[, c("mpg", "cyl", "disp", "hp", "wt", "am", "gear")]
 
 shinyServer(function(input, output) {
-
-  output$distPlot <- renderPlot({
-
-    # generate bins based on input$bins from ui.R
-    x    <- faithful[, 2]
-    bins <- seq(min(x), max(x), length.out = input$bins + 1)
-
-    # draw the histogram with the specified number of bins
-    hist(x, breaks = bins, col = 'darkgray', border = 'white')
-
+  
+  output$plot1 <- renderPlot(
+    {
+    ggplot(mtcars2, aes(wt, mpg)) + geom_point(aes(colour = factor(cyl)),size=input$integer)
+    }
+  )
+  
+  output$click_info <- renderPrint({
+    nearPoints(mtcars2, input$plot1_click)
   })
-
+  
+  output$brush_info <- renderPrint({
+    brushedPoints(mtcars2, input$plot1_brush)
+  })
 })

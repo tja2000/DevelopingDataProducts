@@ -6,25 +6,32 @@
 #
 
 library(shiny)
+library(ggplot2)
 
-shinyUI(fluidPage(
-
-  # Application title
-  titlePanel("Old Faithful Geyser Data"),
-
-  # Sidebar with a slider input for number of bins
-  sidebarLayout(
-    sidebarPanel(
-      sliderInput("bins",
-                  "Number of bins:",
-                  min = 1,
-                  max = 50,
-                  value = 30)
+shinyUI(
+  fluidPage(
+    
+         fluidRow(
+           column(width=6 , 
+                  sliderInput("integer", "Point size:", min=1, max=8, value=1)
+               )
+         ),
+     fluidRow(
+        column(width = 4,
+             plotOutput("plot1", height = 400, width=400,
+                        click = "plot1_click",
+                        brush = brushOpts(id = "plot1_brush"))
+            )
     ),
-
-    # Show a plot of the generated distribution
-    mainPanel(
-      plotOutput("distPlot")
+    fluidRow(
+      column(width = 6,
+             h4("Data points near click"),
+             verbatimTextOutput("click_info")
+      ),
+      column(width = 6,
+             h4("Selected (brushed) points"),
+             verbatimTextOutput("brush_info")
+      )
     )
   )
-))
+)
