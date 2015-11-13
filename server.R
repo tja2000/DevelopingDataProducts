@@ -6,17 +6,12 @@
 #
 
 library(shiny)
+library(plyr)
 mtcars2 <- mtcars[, c("mpg", "cyl", "disp", "hp", "wt", "am", "gear")]
 
 shinyServer(function(input, output) 
   {
-#     output$plot1 <- renderPlot(
-#       {
-#         ggplot(mtcars2,aes(wt, mpg)) + 
-#               geom_point(aes(colour = factor(cyl)),size=input$pointSize)
-#       }
-#     )
-  
+
    output$plot.ui <- renderUI(
       {
         plotOutput("plot", 
@@ -28,11 +23,12 @@ shinyServer(function(input, output)
     )
 
     output$plot <- renderPlot(
-           {
-             ggplot(mtcars2,aes(wt, mpg)) + 
-                   geom_point(aes(colour = factor(cyl)),size=input$pointSize)
-           }
-         )
+      {
+        ggplot(mtcars2,
+               aes(disp, mpg)) + geom_point(aes(colour = factor(cyl)),
+               size=input$pointSize)
+      }
+    )
 
     output$click_info <- renderPrint(
       {
@@ -41,7 +37,7 @@ shinyServer(function(input, output)
     )
     output$brush_info <- renderPrint(
       {
-        brushedPoints(mtcars2, input$plot_brush)
+        brushedPoints(mtcars2[order(-mtcars2$mpg),], input$plot_brush)
       }
     )
   }
