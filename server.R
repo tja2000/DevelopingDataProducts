@@ -8,19 +8,41 @@
 library(shiny)
 mtcars2 <- mtcars[, c("mpg", "cyl", "disp", "hp", "wt", "am", "gear")]
 
-shinyServer(function(input, output) {
+shinyServer(function(input, output) 
+  {
+#     output$plot1 <- renderPlot(
+#       {
+#         ggplot(mtcars2,aes(wt, mpg)) + 
+#               geom_point(aes(colour = factor(cyl)),size=input$pointSize)
+#       }
+#     )
   
-  output$plot1 <- renderPlot(
-    {
-    ggplot(mtcars2, aes(wt, mpg)) + geom_point(aes(colour = factor(cyl)),size=input$integer)
-    }
-  )
-  
-  output$click_info <- renderPrint({
-    nearPoints(mtcars2, input$plot1_click)
-  })
-  
-  output$brush_info <- renderPrint({
-    brushedPoints(mtcars2, input$plot1_brush)
-  })
-})
+   output$plot.ui <- renderUI(
+      {
+        plotOutput("plot", 
+                   width = input$plotWidth, 
+                   height=400,
+                   click = "plot_click",
+                   brush = brushOpts(id = "plot_brush"))
+      }
+    )
+
+    output$plot <- renderPlot(
+           {
+             ggplot(mtcars2,aes(wt, mpg)) + 
+                   geom_point(aes(colour = factor(cyl)),size=input$pointSize)
+           }
+         )
+
+    output$click_info <- renderPrint(
+      {
+        nearPoints(mtcars2, input$plot_click)
+      }
+    )
+    output$brush_info <- renderPrint(
+      {
+        brushedPoints(mtcars2, input$plot_brush)
+      }
+    )
+  }
+)
