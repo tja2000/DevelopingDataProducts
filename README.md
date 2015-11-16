@@ -9,3 +9,5 @@ The different colors denote the number of cylinders in the car. Displacement is 
 Click on a dot to get info on the car, it will be display in the left column under “Selected car:”.
 
 If you drag your mouse on the graph you can select multiple cars, they are displayed under “Selected cars ordered by MPG”.
+
+The working app on Shiny can be found here: https://tjanssens.shinyapps.io/DataProducts
